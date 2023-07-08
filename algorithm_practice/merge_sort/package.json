@@ -1,0 +1,12 @@
+{
+  "name": "merge_sort",
+  "version": "1.0.0",
+  "description": "simple merge sort algorithm for a list of div elements",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "build": "webpack"
+  },
+  "author": "elliot hipski",
+  "license": "ISC"
+}
