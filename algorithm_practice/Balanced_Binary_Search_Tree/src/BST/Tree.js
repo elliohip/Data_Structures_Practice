@@ -236,6 +236,34 @@ export default function tree(){
             return node
             
 
+        },
+        /**
+         * 
+         * @param {Function} callback callback function with the argument being the node that is to be
+         * Affected
+         * @param {} node node for the recursive
+         */
+        bredth_first_search : function(callback, node) {
+            let queue = [];
+
+            queue.push(node)
+
+            let current_node;
+
+            while (queue.length != 0) {
+                
+                current_node = queue.shift();
+                callback(current_node);
+
+                if (current_node.left != null) {
+                    queue.push(current_node.left);
+                }
+                if (current_node.right != null) {
+                    queue.push(current_node.right);
+                }
+
+            }
+
         }
 
         

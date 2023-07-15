@@ -34,12 +34,12 @@ let arr = create_numbers();
 
 arr.sort()
 
-console.log(arr)
+//console.log(arr)
 
 test_tree.root = test_tree.balanced_binary_tree(arr, 0, arr.length - 1, test_tree.root, 0);
 
 prettyPrint(test_tree.root);
 
-test_tree.inorder(test_tree.root, 0, function(element) {
+test_tree.bredth_first_search(function(element) {
     console.log(element);
-});
+}, test_tree.root);
