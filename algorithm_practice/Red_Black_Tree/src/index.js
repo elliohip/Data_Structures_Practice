@@ -1,5 +1,12 @@
 const RBT = require("./Red_Black_Tree.js")
 
+
+
+let tree = RBT.default()
+
+
+
+
 let create_numbers = function () {
 
     let rand_nums = [];
@@ -13,6 +20,7 @@ let create_numbers = function () {
             
         }
         
+        tree.insert(rand)
 
 
         rand_nums.push(rand)
@@ -24,8 +32,5 @@ let create_numbers = function () {
 
 let rand_arr = create_numbers();
 
-let tree = RBT.default()
-
-tree.insert(rand_arr[0])
 
 console.log(tree)

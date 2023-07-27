@@ -6,6 +6,9 @@ export default function Red_Black_Tree() {
     let component = {
         start: null,
         size: 0,
+        /**
+         * Different flags depending on if the tree needs to be altered through rotations
+         */
         right_right: false,
         left_right: false,
         left_left: false,
@@ -71,7 +74,7 @@ export default function Red_Black_Tree() {
             let red_red = false;
 
             if (node == null) {
-                node = new RBT_Node(data, null, null, colors.red, );
+                node = new RBT_Node(data, null, null, colors.red, null);
                 this.size++;
             }
             else if (data > node.root) {
@@ -102,13 +105,31 @@ export default function Red_Black_Tree() {
 
             }
             else if (this.right_left) {
-                // node.right = 
+                node.right = this.right_rotation(node.right);
+                node.right.parent = node
+
+                node = this.left_rotation(node);
+                node.color = colors.black;
+                node.left.color = colors.red;
+                this.right_left = false;
+
             }
             else if (this.left_right) {
 
-            }
-            else if (this.right_right) {
+                node.left = this.left_rotation(node.left);
+                node.left.parent = node;
+                
 
+                node = this.right_rotation(node)
+                node.color = colors.black;
+                node.right.color = colors.red;
+                this.left_right = false;
+
+            }
+            else if (this.left_left) {
+                node = this.left_rotation(node);
+                node.left.color = colors.red;
+                node.color = black
             }
             if (red_red) {
                 this.red_red_fixup(red_red, node, data)
@@ -118,7 +139,7 @@ export default function Red_Black_Tree() {
         /**
          * 
          * fixes the red_red conflict for when there is an issue of the parent and inserted node
-         * are both red
+         * are both red, will flag the insert function with to assert when there is a conflict
          * 
          * @param {boolean} red_red 
          * @param {RBT_Node} node 
