@@ -1,6 +1,9 @@
 const RBT_Node = require("./RBT_Node").default
 
-const colors = require("./colors").colors
+const colors = {
+    red: 1,
+    black: 0
+}
 
 export default function Red_Black_Tree() {
     let component = {
@@ -28,6 +31,7 @@ export default function Red_Black_Tree() {
             if (right_left != null) {
                 right_left.parent = node;
             }
+
             return temp_right;
         },
         /**
@@ -45,6 +49,7 @@ export default function Red_Black_Tree() {
             if (left_right != null) {
                 left_right = node;
             }
+
             return temp_right;
 
         },
@@ -60,7 +65,7 @@ export default function Red_Black_Tree() {
                 this.size++;
             }
             else {
-                this.start = this.insert_helper(this.start, data);
+                this.insert_helper(this.start, data);
             }
 
         },
@@ -74,14 +79,15 @@ export default function Red_Black_Tree() {
             let red_red = false;
 
             if (node == null) {
-                node = new RBT_Node(data, null, null, colors.red, null);
+                let n = new RBT_Node(data, null, null, colors.red, null);
                 this.size++;
+                return n
             }
             else if (data > node.root) {
 
-                node.right = insert_helper(root.right, data);
+                node.right = this.insert_helper(node.right, data);
                 node.right.parent = node;
-                if (node != this.root) {
+                if (node != this.start) {
                     if (node.right.color == colors.red && node.color == colors.red) {
                         red_red = true;
                     }
@@ -90,7 +96,7 @@ export default function Red_Black_Tree() {
             else {
                 node.left = this.insert_helper(node.left, data);
                 node.left.parent = node;
-                if (node != this.root) {
+                if (node != this.start) {
                     if (node.left.color == colors.red && node.color == colors.red) {
                         red_red = true;
                     }
@@ -134,7 +140,8 @@ export default function Red_Black_Tree() {
             if (red_red) {
                 this.red_red_fixup(red_red, node, data)
             }
-            
+
+            return node
         },
         /**
          * 
@@ -157,8 +164,13 @@ export default function Red_Black_Tree() {
                             this.left_right = true;
                         }
                     }
-                    if (node.parent.right.color == colors.red) {
-                        
+                    else {
+                        node.parent.right.color = colors.black
+                        node.color = colors.black
+
+                        if (node.parent != this.start) {
+                            node.parent.color = colors.red
+                        }
                     }
                 }
                 else if (node.parent.right == node) {
@@ -172,8 +184,13 @@ export default function Red_Black_Tree() {
                         }
                     
                     }
-                    if (node.parent.left.color == colors.red) {
+                    else {
+                        node.parent.left.color = colors.black;
+                        node.color = colors.black;
 
+                        if (node.parent != this.start) {
+                            node.parent.color = colors.red
+                        }
                     }
                 }
             }
