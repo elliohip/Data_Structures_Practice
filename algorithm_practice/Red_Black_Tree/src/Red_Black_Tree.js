@@ -50,7 +50,7 @@ export default function Red_Black_Tree() {
                 left_right = node;
             }
 
-            return temp_right;
+            return temp_left;
 
         },
         /**

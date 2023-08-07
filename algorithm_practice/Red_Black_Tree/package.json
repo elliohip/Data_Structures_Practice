@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "build": "webpack",
-    "mode": "development"
+    "build": "webpack"
   },
   "author": "elliot",
   "license": "ISC"

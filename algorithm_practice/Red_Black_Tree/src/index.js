@@ -1,5 +1,7 @@
 const RBT = require("./Red_Black_Tree.js")
 
+const prettyPrint = require("./pretty_print.js").default
+
 
 
 let tree = RBT.default()
@@ -32,5 +34,6 @@ let create_numbers = function () {
 
 let rand_arr = create_numbers();
 
+prettyPrint(tree.start)
 
 console.log(tree)
