@@ -55,6 +55,28 @@ export default function Red_Black_Tree() {
         },
         /**
          * 
+         * @param {RBT_Node} node 
+         * @param {Object} data 
+         * @returns 
+         */
+        find_help : function(node, data) {
+            if (node == null || node.root == data) {
+                return node;
+            }
+
+            if (node.compareTo(data) > 0) {
+                return this.find_help(node.left, data)
+            }
+            else if (node.compareTo(data) < 0) {
+                return this.find_help(node.right, data)
+            }
+            
+        },
+        find : function(data) {
+            return this.find_help(this.start, data)
+        },
+        /**
+         * 
          * @param {Object} data data to insert
          */
         insert: function(data) {
@@ -83,7 +105,7 @@ export default function Red_Black_Tree() {
                 this.size++;
                 return n
             }
-            else if (data > node.root) {
+            else if (node.compareTo(data) < 0) {
 
                 node.right = this.insert_helper(node.right, data);
                 node.right.parent = node;
@@ -146,7 +168,7 @@ export default function Red_Black_Tree() {
         /**
          * 
          * fixes the red_red conflict for when there is an issue of the parent and inserted node
-         * are both red, will flag the insert function with to assert when there is a conflict
+         * are both red
          * 
          * @param {boolean} red_red 
          * @param {RBT_Node} node 
@@ -160,7 +182,7 @@ export default function Red_Black_Tree() {
                         if (node.left != null && node.left.color == colors.red) {
                             this.right_right = true;
                         }
-                        if (node.right != null && node.right.color == colors.black) {
+                        else if (node.right != null && node.right.color == colors.black) {
                             this.left_right = true;
                         }
                     }
@@ -194,6 +216,196 @@ export default function Red_Black_Tree() {
                     }
                 }
             }
+        },
+        /**
+         * 
+         * helper method to fix when there is a double black error, and the height of 
+         * the black part of the tree will be altered
+         * 
+         * @param {RBT_Node} node 
+         * @returns 
+         */
+        black_black_fixup : function(node) {
+            if (node == this.start) {
+                return;
+            }
+
+            let sibling = node.find_sibling();
+
+            if (sibling == null) {
+                this.black_black_fixup(node.parent)
+            }
+            else {
+                if (sibling.color == colors.red) {
+                    node.parent.color = colors.red
+                    sibling.color = colors.black
+                    if (sibling.is_left()) {
+                        this.right_rotation(node.parent)
+                    }
+                    else {
+                        this.left_rotation(node.parent)
+                    }
+                    this.black_black_fixup(node)
+                }
+                else {
+                    if (sibling.left.color == colors.red || sibling.right.color == colors.red) {
+                        if (sibling.left != null && sibling.left.color == colors.red) {
+                            if (sibling.is_left()) {
+                                sibling.left.color = sibling.color;
+                                sibling.color = sibling.parent.color;
+                                this.right_rotation(node);
+                            }
+                            else {
+                                sibling.left.color = node.parent.color;
+                                this.right_rotation(sibling);
+                                this.left_rotation(node.parent);
+                            }
+                        }
+                        else {
+                            if (sibling.is_left()) {
+                                sibling.right.color = node.parent.color;
+                                this.left_rotation(sibling);
+                                this.right_rotation(node.parent);
+                            }
+                            else {
+                                sibling.right.color = sibling.color;
+                                sibling.color = node.parent.color;
+                                this.left_rotation(node.parent);
+                            }
+                        }
+                        node.parent.color = colors.black;
+
+                    }
+                    else {
+                        sibling.color = colors.red;
+                        if (node.parent.color == colors.black) {
+                            this.black_black_fixup(node.parent)
+                        }
+                        else {
+                            node.parent.color = colors.black
+                        }
+                    }
+                    
+                }
+                
+            }
+
+
+
+
+        },
+        /**
+         * 
+         * @param {RBT_Node} node node to delete/find the replacement for
+         * @returns {RBT_Node}
+         */
+        find_replacement : function(node) {
+            if (node.right != null && node.left != null) {
+                let current = node.right;
+                while (node.left != null) {
+                    current = current.left;
+                }
+                return current
+                 
+            }
+            else if (node.left == null && node.right == null) {
+                return null;
+            }
+            
+            if (node.left != null && node.right == null) {
+                return node.left
+            }
+            else {
+                return node.right
+            }
+        },
+        /**
+         * 
+         * @param {RBT_Node} node 
+         */
+        remove_helper : function (node) {
+            let replacement = this.find_replacement(node)
+
+            let main_parent = node.parent;
+            
+
+            let double_black = (node.color == colors.black && replacement.color == colors.black);
+            
+            if (replacement == null) {
+                if (node == this.start) {
+                    this.start = null;
+                    this.size--;
+                }
+                else {
+                    if (double_black) {
+
+                        this.black_black_fixup(node)
+                    }
+                    else {
+                        if (node.find_sibling() != null) {
+                            let sibling = node.find_sibling();
+                            sibling.color = colors.red;
+                        }
+                    }
+
+                    if (node.is_left()) {
+                        node.parent.left = null;
+                    }
+                    else {
+                        node.parent.right = null;
+                    }
+                }
+                node = null;
+                return;
+            }
+
+            if (node.left == null || node.right == null) {
+                if (node == this.start) {
+                    node.root = replacement.root;
+                    // let temp = replacement.right;
+
+                    node.left = node.right;
+                    node.right = null;
+
+                    replacement = null;
+                }
+                else {
+                    if (node.is_left()) {
+                        main_parent.left = replacement;
+
+                    }
+                    else {
+                        main_parent.right = replacement;
+                    }
+
+                    node = null;
+
+                    replacement.parent = main_parent;
+
+                    if (double_black) {
+                        this.black_black_fixup(replacement)
+                    }
+                    else {
+                        replacement.color = colors.black;
+                    }
+                }
+                return;
+            }
+
+            let temp = replacement.root;
+            replacement.root = node.root;
+            node.root = temp;
+
+            this.remove_helper(replacement);
+        },
+        remove : function(data) {
+            if (this.start == null) {
+                return 
+            }
+
+            let node = this.find(data);
+
+            
         }
         
     }

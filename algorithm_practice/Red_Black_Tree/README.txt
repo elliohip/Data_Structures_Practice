@@ -1,3 +1,10 @@
+purpose of this assignment is to better understand tree data structures, as well as efficient ways to traverse them.  
+
+This is the algorithm for a red blck tree, a Data Struecture that is useful in low level data retrieval, inserting, and deleting data, short time complexity for retrieving data
+
+
+
+
 pseudocode :
 
 - assumptions {
@@ -20,5 +27,5 @@ Red-Black-Tree:
     + insert() - inserts an element using the insert helper method, or adds to the tree if empty
     - insert_helper() - inserts an element while keeping the tree balanced, rotating when needed 
 
-    + delete() - deletes an element, while maintaining the balanced property
+    + remove() - deletes an element, while maintaining the balanced property
 
