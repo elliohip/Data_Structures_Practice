@@ -398,6 +398,11 @@ export default function Red_Black_Tree() {
 
             this.remove_helper(replacement);
         },
+        /**
+         * 
+         * @param {*} data 
+         * @returns 
+         */
         remove : function(data) {
             if (this.start == null) {
                 return 
@@ -405,7 +410,12 @@ export default function Red_Black_Tree() {
 
             let node = this.find(data);
 
-            
+            if (node.root != data) {
+                alert("ERROR, data not found")
+            }
+
+            this.remove_helper(node);
+
         }
         
     }
