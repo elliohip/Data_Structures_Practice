@@ -231,8 +231,8 @@ export default function tree(){
 
             let node = BST_Node(arr[middle], 1);
 
-            node.left = this.balanced_binary_tree(arr, start, middle - 1);
-            node.right = this.balanced_binary_tree(arr, middle + 1, end);
+            node.left = this.balanced_binary_tree(arr, start, middle - 1, depth + 1);
+            node.right = this.balanced_binary_tree(arr, middle + 1, end, depth + 1);
 
             
 
@@ -302,6 +302,18 @@ export default function tree(){
             this.bredth_first_search(callback, this.root);
 
             return list;
+        }, 
+        /**
+         * 
+         * @param {Function} compare_function comparator for the tree to rebalance in a proper way.
+         * should take a current and other object, in iterator fashion
+         */
+        rebalance : function(compare_function) {
+            let list = this.tree_to_list_BFS();
+
+            list.sort(compare_function);
+
+            this.root = this.balanced_binary_tree(list,0, list.length - 1, 0)
         }
 
         
