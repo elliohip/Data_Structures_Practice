@@ -1,6 +1,11 @@
 import BST_Node from "./BSTNode";
 import BST_Data from "./BST_Data";
 
+/**
+ * 
+ * @returns {Object} Object for a general binary tree.  This is to say, an unbalanced binary tree.
+ * This has the functionality to add, delete, and 
+ */
 export default function tree(){
     
     let component = {
@@ -59,7 +64,6 @@ export default function tree(){
                 if (data.root.compareFn(node.root) < 0) {
                     
                     if (node.left == null) {
-                        
                         node.left = data;
                         this.size++;
                         return
@@ -264,6 +268,40 @@ export default function tree(){
 
             }
 
+        },
+        get_height : function(node, h) {
+            if (node == null) {
+                return h
+            }
+            if (node.left != null) {
+                return this.get_height(node.left, h + 1);
+            }
+            else if (node.right != null) {
+                return this.get_height(node.right, h + 1);
+            }
+            else if (node.left != null && node.right != null) {
+                return Math.max(this.get_height(node.left), this.get_height(node.right));
+            }
+            
+        }
+        ,
+        is_balanced : function() {
+            return Math.abs(this.get_height(this.root.left) - this.get_height(this.root.right)) <= 1;
+        },
+        /**
+         * 
+         * @returns {[]} List that stores the array version of this tree
+         */
+        tree_to_list_BFS : function() {
+            let list = [];
+
+            const callback = function(current) {
+                list.push(current);
+            }
+
+            this.bredth_first_search(callback, this.root);
+
+            return list;
         }
 
         
