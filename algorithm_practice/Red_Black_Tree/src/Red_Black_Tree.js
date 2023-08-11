@@ -1,14 +1,39 @@
 const RBT_Node = require("./RBT_Node").default
 
+/**
+         * 
+         * @param {Number} current 
+         * @param {Number} other 
+         * @returns 
+         */
+let comparator = function(current, other) {
+    if (current > other) {
+        return 1;
+    }
+    else if (current < other) {
+        return -1;
+    }
+    else {
+        return 0;
+    }
+}
+
+
 const colors = {
     red: 1,
     black: 0
 }
 
-export default function Red_Black_Tree() {
+/**
+ * 
+ * @param {Function} comp 
+ * @returns 
+ */
+export default function Red_Black_Tree(comp) {
     let component = {
         start: null,
         size: 0,
+        compare : comp,
         /**
          * Different flags depending on if the tree needs to be altered through rotations
          */
@@ -60,14 +85,14 @@ export default function Red_Black_Tree() {
          * @returns 
          */
         find_help : function(node, data) {
-            if (node == null || node.root == data) {
+            if (node == null || this.compare(node.root, data) == 0) {
                 return node;
             }
 
-            if (node.compareTo(data) > 0) {
+            if (this.compare(node.root, data) > 0) {
                 return this.find_help(node.left, data)
             }
-            else if (node.compareTo(data) < 0) {
+            else if (this.compare(node.root, data) < 0) {
                 return this.find_help(node.right, data)
             }
             
@@ -105,7 +130,7 @@ export default function Red_Black_Tree() {
                 this.size++;
                 return n
             }
-            else if (node.compareTo(data) < 0) {
+            else if (this.compare(node.root, data) < 0) {
 
                 node.right = this.insert_helper(node.right, data);
                 node.right.parent = node;
@@ -302,7 +327,7 @@ export default function Red_Black_Tree() {
         find_replacement : function(node) {
             if (node.right != null && node.left != null) {
                 let current = node.right;
-                while (node.left != null) {
+                while (current.left != null) {
                     current = current.left;
                 }
                 return current
@@ -412,12 +437,16 @@ export default function Red_Black_Tree() {
 
             if (node.root != data) {
                 alert("ERROR, data not found")
+                return;
             }
-
             this.remove_helper(node);
-
+            this.size -= 1;
         }
         
+    }
+
+    if (component.compare == undefined || component.compare == null) {
+        component.compare = comparator;
     }
 
     return component;

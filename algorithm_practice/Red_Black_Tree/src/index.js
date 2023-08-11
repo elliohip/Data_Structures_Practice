@@ -4,6 +4,8 @@ const prettyPrint = require("./pretty_print.js").default
 
 
 
+
+
 let tree = RBT.default()
 
 
@@ -36,4 +38,8 @@ let rand_arr = create_numbers();
 
 prettyPrint(tree.start)
 
-console.log(tree)
+tree.remove(rand_arr[7]);
+
+console.log("\n \n \n \n \n \n")
+
+prettyPrint(tree.start)
