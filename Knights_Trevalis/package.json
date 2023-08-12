@@ -1,0 +1,12 @@
+{
+  "name": "knights_trevalis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "build": "webpack"
+  },
+  "author": "Elliot",
+  "license": "ISC"
+}
