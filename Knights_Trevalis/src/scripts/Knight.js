@@ -4,7 +4,7 @@ import position from "./Position";
  * 
  * @param {Number} x an integer between 1-8
  * @param {Number} y an integer between 1-8
- * @param {Object} b array representation of the board
+ * @param {Object} b array representation of the board, as a 2d array
  */
 export default function Knight(x,y, b) {
     if (x > 8 || x < 8) {
@@ -46,13 +46,19 @@ export default function Knight(x,y, b) {
 
             return false
         },
+        /**
+         * sets this knight's possible next positions
+         */
         set_moves : function() {
             this.possible_moves.down_left = this.position.next_pos(-1, -2);
             this.possible_moves.up_left = this.position.next_pos(-1, 2);
             this.possible_moves.left_down = this.position.next_pos(-2, -1);
             this.possible_moves.left_up = this.position.next_pos(-2, 1);
             this.possible_moves.up_right = this.position.next_pos(1, 2);
-            this.possible_moves.up_left = this.position.next_pos()
+            this.possible_moves.right_down = this.position.next_pos(2, -1);
+            this.possible_moves.right_up = this.position.next_pos(2, 1);
+            this.possible_moves.down_right = this.position.next_pos(1, -2);
+
         }
 
     }

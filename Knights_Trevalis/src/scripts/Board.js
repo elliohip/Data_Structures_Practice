@@ -19,12 +19,15 @@ export default function Board(x, y){
 
             this.pieces = columns
         },
+        /**
+         * helper function to add the knight to the board by setting the knight's current board
+         */
         add_knight : function() {
             this.make_pieces();
 
             this.knight.board = this.pieces;
 
-            this.knight.possible_moves.up_left = 
+            this.knight
         },
         /**
          * 
