@@ -10,11 +10,19 @@ export default class position {
      * @param {Number} i 
      * @param {Number} j 
      */
-    constructor(i, j) {
+    constructor(i, j, b) {
         this.x = i
         this.y = j
+        this.discovered = false;
     }
-    
+    /**
+     * 
+     * @param {Boolean} b 
+     */
+    set_discovered(b) {
+        this.discovered = b;
+    }
+
     /**
      * 
      * @param {Number} delt_x x value change
@@ -33,7 +41,14 @@ export default class position {
 
         return new position(next_x, next_y);
     }
-    
+    /**
+     * 
+     * @param {position[][]} b grid of position elements in a board
+     * @returns 
+     */
+    to_board(b) {
+        return b[this.x][this.y]
+    }
 }
 
     

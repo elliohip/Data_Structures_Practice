@@ -2,6 +2,12 @@ import Knight from "./Knight";
 import Move_Node from "./Move_Node";
 import position from "./Position";
 
+/**
+ * Board factory function
+ * @param {Number} x 
+ * @param {Number} y 
+ * @returns Main board object
+ */
 export default function Board(x, y){
 
     let component = {
@@ -13,13 +19,22 @@ export default function Board(x, y){
                 let column = [];
 
                 for (let j = 0; j < 8; j++) {
-                    column[j] = new position(i, j);
+                    column[j] = new position(j, i);
                 }
                 columns[i] = column; 
             }
 
             console.log(columns);
             this.pieces = columns
+        },
+        /**
+         * 
+         * @param {Number} x 
+         * @param {Nuumber} y 
+         * @returns {position} position for this board piece
+         */
+        get_piece : function(x, y) {
+            return this.pieces[x][y]
         },
         /**
          * helper function to add the knight to the board by setting the knight's current board
@@ -113,51 +128,119 @@ export default function Board(x, y){
                  * find the list of moves that end in the parameter position object
                  * 
                  * @param {position} p 
+                 * @param {position[][]} b board of elements as a 2D array
                  */
-                move_to : function (p) {
+                move_to : function (p, b) {
 
                     let list = [];
+                    let pos = b
 
                     if (this.start.position == p) {
-                        return this.start;
+                        list.push(this.start.position)
+                        return list;
                     }
                     else {
-                        this.move_to_helper(p, this.start.down_left, list)
-                        this.move_to_helper(p, this.start.down_right, list)
-                        this.move_to_helper(p, this.start.left_down, list)
-                        this.move_to_helper(p, this.start.left_up, list)
-                        this.move_to_helper(p, this.start.right_down, list)
-                        this.move_to_helper(p, this.start.right_up, list)
-                        this.move_to_helper(p, this.start.up_left, list)
-                        this.move_to_helper(p, this.start.up_right, list)
+                        let ret_list = [];
+                        list.push(this.start);
+                        
+                        this.move_to_helper(p, list, b, ret_list);
+
+                        return ret_list
                     }
 
                 },
                 /**
                  * 
                  * @param {position} p 
-                 * @param {[]} list 
+                 * @param {Move_Node[]} list 
+                 * @param {position[][]} b
+                 * @param {position[]} move_list of shortest path, as the knight discovers it
                  */
-                move_to_helper : function (p, current, list) {
+                move_to_helper : function (p, list, b, move_list) {
 
-                    if (current.position == p) {
-                        return {
-                            l : list,
-                            list_length : list.length
+                    
+
+                    if (list.length == 0) {
+                        return;
+                    }
+
+                    let current = list.shift();
+
+                    
+
+                    if (b[current.position.x][current.position.y].discovered) {
+                        return;
+                    }
+
+                    if (current.position.x == p.x && current.position.y == p.y) {
+
+                        let items = [];
+                    
+                        for (let i = 0; i < list.length; i++) {
+                            let item = list.shift();
+                            items.push(item)
+                            move_list.push(item)
+                        }
+                        return items
+                        
+                    }
+                    
+                    
+                    current.set_tree(b);
+                    
+                    b[current.position.x][current.position.y].set_discovered(true);
+
+                    this.add_helper(current.down_left, list, b);
+                    this.add_helper(current.down_right, list, b);
+                    this.add_helper(current.left_down, list, b);
+                    this.add_helper(current.left_up, list, b);
+                    this.add_helper(current.right_down, list, b);
+                    this.add_helper(current.right_up, list, b);
+                    this.add_helper(current.up_left, list, b);
+                    this.add_helper(current.up_right, list, b);
+
+                    this.move_to_helper(p, list, b, move_list)
+
+                        // let ret_list = this.find_best_path(moves_list);
+                        // return ret_list;
+                        
+                    
+                },
+                /**
+                 * 
+                 * @param {[][]} moves 
+                 * @returns {[]} list of moves for the best path
+                 */
+                find_best_path : function(moves) {
+                    let best = null;
+                    for (let i = 0; i < moves.length; i++) {
+                        if (moves[i] != null && (best == null || moves[i].length < best.length)) {
+                            best = moves[i];
                         }
                     }
-                    if (current == null) {
-                        return
+                    if (best == null) {
+                        console.log("ERROR, NO MOVE LIST");
+                        return null;
                     }
+                    return best;
+                },
+                /**
+                 * 
+                 * @param {Move_Node} item 
+                 * @param {Move_Node[]} list 
+                 * @param {position[][]} b board
+                 */
+                add_helper : function(item, list, b) {
 
-                    if (list.includes(current)) {
-                        return
-                    }
-
+                if (item != null) {
+                    list.push(item)
+                    item.position.to_board(b).set_discovered(true)
                 }
-                
-                
             }
+                
+                
+        }
+            
             return component
         },
         

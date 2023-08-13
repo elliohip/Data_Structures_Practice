@@ -3,6 +3,7 @@ import position from "./Position";
 import Knight_Moves from "./Possible_Knight_Moves";
 
 /**
+ * knight factory
  * 
  * @param {Number} x an integer between 0-7
  * @param {Number} y an integer between 0-7
@@ -38,14 +39,6 @@ export default function Knight(x,y, b) {
             }
 
             return false
-        },
-        /**
-         * sets this knight's possible next positions
-         */
-        set_moves : function() {
-            
-            
-
         }
     }
 
