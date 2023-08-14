@@ -1,5 +1,6 @@
 import Board from "./scripts/Board";
 import position from "./scripts/Position";
+import knight_moves from "./scripts/knight_moves";
 
 let board = Board(0,0);
 board.add_board_and_knight();
@@ -48,4 +49,6 @@ const find_moves = function(b) {
 
 
 
-console.log(move_l);
+// console.log(move_l);
+
+console.log(knight_moves(new position(2,2), new position(3,3)));
