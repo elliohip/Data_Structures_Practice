@@ -83,12 +83,31 @@ export default function Board(x, y){
                  * @param {position[][]} b board of elements as a 2D array
                  */
                 move_to : function (p, b) {
+                    let path_list = [];
                     let queue = [];
                     queue.push(this.start);
+                    this.start.position.set_discovered(true)
+
 
                     while (queue.length > 0) {
                         let node = queue.shift();
+                        node.set_tree(b);
+
+                        if (node.position.is_equal(p)) {
+                            
+                            
+                            return queue
+                        }
+                        let moves = node.to_node_list();
+                        for (let i = 0; i < moves.length; i++) {
+                            if (moves[i].position.discovered == false) {
+                                let data = moves[i];
+                                queue.push(data)
+                                moves[i].position.set_discovered(true)
+                            }
+                        }
                     }
+                    return path_list
                 },
                 /**
                  * 

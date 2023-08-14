@@ -97,7 +97,10 @@ export default class Move_Node {
             this.down_right = new Move_Node(pos.to_board(b));
         }
     }
-
+    /**
+     * 
+     * @returns {Move_Node[]}
+     */
     to_node_list() {
         let list = []
 
