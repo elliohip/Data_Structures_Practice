@@ -24,6 +24,8 @@ export default class Move_Node {
         this.right_up;
         this.down_right;
 
+        this.previous;
+
         this.score;
     }
     /**
@@ -45,6 +47,16 @@ export default class Move_Node {
         
 
     }
+
+    /**
+     * 
+     * @param {Move_Node} p previous move 
+     */
+    set_previous(p) {
+
+        this.previous = p;
+    }
+
     set_down_left(b) {
         if (this.position.next_pos(-1, -2) != null) {
             let pos = this.position.next_pos(-1, -2);

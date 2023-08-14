@@ -32,7 +32,7 @@ export default class position {
     next_pos (delt_x,delt_y, b) {
 
         if ((this.x + delt_x >= 8 || this.x + delt_x < 0) || (this.y + delt_y >= 8 || this.y + delt_y < 0)) {
-            console.log("not valid move")
+            // console.log("not valid move")
             return null;
         }
 

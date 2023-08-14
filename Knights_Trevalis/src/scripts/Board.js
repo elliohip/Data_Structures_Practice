@@ -81,29 +81,58 @@ export default function Board(x, y){
                  * 
                  * @param {position} p 
                  * @param {position[][]} b board of elements as a 2D array
+                 * @param {Move_Node[]} move_list
                  */
-                move_to : function (p, b) {
+                move_to : function (p, b, move_list) {
                     let path_list = [];
                     let queue = [];
-                    queue.push(this.start);
-                    this.start.position.set_discovered(true)
 
+                    /**
+                     * 
+                     * @param {*} list 
+                     * @param {*} other 
+                     */
+                    const take_from_list = function(list, other) {
+                        let data = list.shift();
+                        other.push(data)
+
+                        return data;
+                    }
+                    
+                    this.start.position.set_discovered(true)
+                    queue.push(this.start);
 
                     while (queue.length > 0) {
                         let node = queue.shift();
-                        node.set_tree(b);
+                        
+                        
+
+                        console.log(node)
 
                         if (node.position.is_equal(p)) {
                             
-                            
-                            return queue
+                            let end = node
+                            while (end != this.start) {
+                                move_list.push(end);
+                                
+                                end = end.previous;
+                                
+                            }
+                            move_list.push(end);
+                            return;
                         }
-                        let moves = node.to_node_list();
-                        for (let i = 0; i < moves.length; i++) {
-                            if (moves[i].position.discovered == false) {
+                        if (!path_list.includes(node)) {
+                            node.set_tree(b);
+                            path_list.push(node);
+                            node.position.set_discovered(true);
+                            let moves = node.to_node_list();
+                            for (let i = 0; i < moves.length; i++) {
+                                
                                 let data = moves[i];
-                                queue.push(data)
-                                moves[i].position.set_discovered(true)
+                                data.set_previous(node);
+                                queue.push(data);
+                                
+                                
                             }
                         }
                     }

@@ -6,7 +6,10 @@ board.add_board_and_knight();
 
 let posit = new position(5,4)
 let pos = board.get_piece(posit.x, posit.y)
-let moves = board.knight_move_tree().move_to(pos, board.pieces);
+
+let move_l = [];
+
+let moves = board.knight_move_tree().move_to(pos, board.pieces, move_l);
 
 
 const knight_moves_inefficient = function () {
@@ -27,8 +30,22 @@ const knight_moves_inefficient = function () {
     return new_list;
 }
 
+const find_moves = function(b) {
+
+    for (let i = 0; i < b.length; i++) {
+        let x = b[i];
+        for (let j = 0; j < x; j++) {
+            let piece = x[j]
+            if (piece.discovered) {
+
+            }
+
+        }
+    }
+}
+
 // let other_moves = knight_moves_inefficient()
 
 
 
-console.log(moves);
+console.log(move_l);
