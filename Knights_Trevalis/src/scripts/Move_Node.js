@@ -31,75 +31,97 @@ export default class Move_Node {
      */
     set_tree(b) {
 
-        this.set_down_left();
-        this.set_down_right();
-        this.set_left_down();
-        this.set_left_up();
-        this.set_right_down();
-        this.set_right_up();
-        this.set_up_left();
-        this.set_up_right();
+        this.position = b[this.position.x][this.position.y];
+        this.set_down_left(b);
+        this.set_down_right(b);
+        this.set_left_down(b);
+        this.set_left_up(b);
+        this.set_right_down(b);
+        this.set_right_up(b);
+        this.set_up_left(b);
+        this.set_up_right(b);
 
-        if (this.down_left.position != null) {
-            this.down_left.position = this.down_left.position.to_board(b)
-        }
-        if ()
-            this.down_right.position = this.down_right.position.to_board(b)
-
-            this.left_down.position = this.left_down.position.to_board(b)
-
-            this.left_up.position = this.left_up.position.to_board(b)
-
-            this.right_down.position = this.right_down.position.to_board(b)
-
-            this.right_up.position = this.right_up.position.to_board(b)
-
-            this.up_left.position = this.up_left.position.to_board(b)
-
-            this.up_right.position = this.up_right.position.to_board(b)
+        
         
 
     }
     set_down_left(b) {
         if (this.position.next_pos(-1, -2) != null) {
-            this.down_left = new Move_Node(this.position.next_pos(-1, -2));
-            this.down_left.position = this.down_left.position.to_board(b)
+            let pos = this.position.next_pos(-1, -2);
+            this.down_left = new Move_Node(pos.to_board(b));
+            
         }
     }
 
     set_up_left(b) {
         if (this.position.next_pos(-1, 2) != null) {
-            this.up_left = new Move_Node(this.position.next_pos(-1, 2));
+            let pos = this.position.next_pos(-1, 2);
+            this.up_left = new Move_Node(pos.to_board(b));
         }
     }
     set_left_down(b) {
         if (this.position.next_pos(-2, -1) != null) {
-            this.left_down = new Move_Node(this.position.next_pos(-2, -1));
+            let pos = this.position.next_pos(-2, -1);
+            this.left_down = new Move_Node(pos.to_board(b));
+            
         }
     }
     set_left_up(b) {
         if (this.position.next_pos(-2, 1) != null) {
-            this.left_up = new Move_Node(this.position.next_pos(-2, 1));
+            let pos = this.position.next_pos(-2, 1);
+            this.left_up = new Move_Node(pos.to_board(b));
+            
         }
     }
-    set_up_right() {
+    set_up_right(b) {
         if (this.position.next_pos(1, 2) != null) {
-            this.up_right = new Move_Node(this.position.next_pos(1, 2));
+            let pos = this.position.next_pos(1, 2)
+            this.up_right = new Move_Node(pos.to_board(b));
         }
     }
-    set_right_down() {
+    set_right_down(b) {
         if (this.position.next_pos(2, -1) != null) {
-            this.right_down = new Move_Node(this.position.next_pos(2, -1));
+            let pos = this.position.next_pos(2, -1);
+            this.right_down = new Move_Node(pos.to_board(b));
         }
     }
-    set_right_up() {
+    set_right_up(b) {
         if (this.position.next_pos(2, 1) != null) {
-            this.right_up = new Move_Node(this.position.next_pos(2, 1));
+            let pos = this.position.next_pos(2, 1);
+            this.right_up = new Move_Node(pos.to_board(b));
         }
     }
-    set_down_right() {
+    set_down_right(b) {
         if (this.position.next_pos(1, -2) != null) {
-            this.down_right = new Move_Node(this.position.next_pos(1, -2));
+            let pos = this.position.next_pos(1, -2);
+            this.down_right = new Move_Node(pos.to_board(b));
+        }
+    }
+
+    to_node_list() {
+        let list = []
+
+        this.add_to_list(this.down_left, list);
+        this.add_to_list(this.down_right, list);
+        this.add_to_list(this.left_down, list);
+        this.add_to_list(this.left_up, list);
+        this.add_to_list(this.right_down, list);
+        this.add_to_list(this.right_up, list);
+        this.add_to_list(this.up_left, list);
+        this.add_to_list(this.up_right, list);
+
+        return list;
+        
+    }
+
+    /**
+     * 
+     * @param {Move_Node} data 
+     * @param {Move_Node[]} list 
+     */
+    add_to_list(data, list) {
+        if (data != null) {
+            list.push(data);
         }
     }
 

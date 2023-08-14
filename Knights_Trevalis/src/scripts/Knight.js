@@ -15,7 +15,7 @@ export default function Knight(x,y, b) {
         return;
     }
     let component = {
-        position : new position(x,y),
+        position : new position(x,y,b),
         moves : [],
         possible_moves : new Move_Node(new position(x,y)),
         board : null,

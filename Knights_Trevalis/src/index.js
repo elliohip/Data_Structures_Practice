@@ -27,7 +27,7 @@ const knight_moves_inefficient = function () {
     return new_list;
 }
 
-let other_moves = knight_moves_inefficient()
+// let other_moves = knight_moves_inefficient()
 
 
 

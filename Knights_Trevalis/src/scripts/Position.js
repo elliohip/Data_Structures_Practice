@@ -10,7 +10,7 @@ export default class position {
      * @param {Number} i 
      * @param {Number} j 
      */
-    constructor(i, j, b) {
+    constructor(i, j) {
         this.x = i
         this.y = j
         this.discovered = false;
@@ -27,9 +27,9 @@ export default class position {
      * 
      * @param {Number} delt_x x value change
      * @param {Number} delt_y y value change
-     * @return {Object} position object that represents the next possible move
+     * @return {position} position object that represents the next possible move
      */
-    next_pos (delt_x,delt_y) {
+    next_pos (delt_x,delt_y, b) {
 
         if ((this.x + delt_x >= 8 || this.x + delt_x < 0) || (this.y + delt_y >= 8 || this.y + delt_y < 0)) {
             console.log("not valid move")
@@ -48,6 +48,13 @@ export default class position {
      */
     to_board(b) {
         return b[this.x][this.y]
+    }
+
+    is_equal(o) {
+        if (o.x == this.x && o.y == this.y) {
+            return true
+        }
+        return false
     }
 }
 

@@ -19,7 +19,7 @@ export default function Board(x, y){
                 let column = [];
 
                 for (let j = 0; j < 8; j++) {
-                    column[j] = new position(j, i);
+                    column[j] = new position(i, j);
                 }
                 columns[i] = column; 
             }
@@ -72,57 +72,9 @@ export default function Board(x, y){
             
         }, 
         knight_move_tree : function() {
+            let its = this.pieces;
             let component = {
-                start: new Move_Node(this.knight.position),
-                /**
-                 * builds the move graph
-                 */
-                move_graph : function(b) {
-                    this.start.set_tree();
-                    let list = []
-                    
-
-                    this.move_helper(b, this.start.down_left, list);
-                    this.move_helper(b, this.start.down_right, list);
-                    this.move_helper(b, this.start.up_right, list);
-                    this.move_helper(b, this.start.left_up, list);
-                    this.move_helper(b, this.start.left_down, list);
-                    this.move_helper(b, this.start.up_left, list);
-                    this.move_helper(b, this.start.right_down, list);
-                    this.move_helper(b, this.start.right_up, list);
-                },
-                /**
-                 * @param {[]} b list of board positions
-                 * @param {[*]} list 
-                 * @param {Move_Node} current 
-                 */
-                move_helper : function(b, current, list) {
-
-                    if (current == null) {
-                        return
-                    }
-
-                    if (list.includes(b[current.position.x][current.position.y], 0)) {
-                        return;
-                    }
-                
-                    if (list.includes(b[this.start.position.x][this.start.position.y], 0)) {
-                        return;
-                    }
-
-                    else {
-                        current.set_tree();
-                        list.push(b[current.position.x][current.position.y]);
-                        this.move_helper(b, current.down_left, list);
-                        this.move_helper(b, current.down_right, list);
-                        this.move_helper(b, current.up_right, list);
-                        this.move_helper(b, current.left_up, list);
-                        this.move_helper(b, current.left_down, list);
-                        this.move_helper(b, current.up_left, list);
-                        this.move_helper(b, current.right_down, list);
-                        this.move_helper(b, current.right_up, list);
-                    }
-                },
+                start: new Move_Node(this.knight.position.to_board(its)),
                 /**
                  * meant to be fired after the move tree has been created, will
                  * find the list of moves that end in the parameter position object
@@ -131,112 +83,27 @@ export default function Board(x, y){
                  * @param {position[][]} b board of elements as a 2D array
                  */
                 move_to : function (p, b) {
+                    let queue = [];
+                    queue.push(this.start);
 
-                    let list = [];
-                    let pos = b
-
-                    if (this.start.position == p) {
-                        list.push(this.start.position)
-                        return list;
+                    while (queue.length > 0) {
+                        let node = queue.shift();
                     }
-                    else {
-                        let ret_list = [];
-                        list.push(this.start);
-                        
-                        this.move_to_helper(p, list, b, ret_list);
-
-                        return ret_list
-                    }
-
-                },
-                /**
-                 * 
-                 * @param {position} p 
-                 * @param {Move_Node[]} list 
-                 * @param {position[][]} b
-                 * @param {position[]} move_list of shortest path, as the knight discovers it
-                 */
-                move_to_helper : function (p, list, b, move_list) {
-
-                    
-
-                    if (list.length == 0) {
-                        return;
-                    }
-
-                    let current = list.shift();
-
-                    
-
-                    if (b[current.position.x][current.position.y].discovered) {
-                        return;
-                    }
-
-                    if (current.position.x == p.x && current.position.y == p.y) {
-
-                        let items = [];
-                    
-                        for (let i = 0; i < list.length; i++) {
-                            let item = list.shift();
-                            items.push(item)
-                            move_list.push(item)
-                        }
-                        return items
-                        
-                    }
-                    
-                    
-                    current.set_tree(b);
-                    
-                    b[current.position.x][current.position.y].set_discovered(true);
-
-                    this.add_helper(current.down_left, list, b);
-                    this.add_helper(current.down_right, list, b);
-                    this.add_helper(current.left_down, list, b);
-                    this.add_helper(current.left_up, list, b);
-                    this.add_helper(current.right_down, list, b);
-                    this.add_helper(current.right_up, list, b);
-                    this.add_helper(current.up_left, list, b);
-                    this.add_helper(current.up_right, list, b);
-
-                    this.move_to_helper(p, list, b, move_list)
-
-                        // let ret_list = this.find_best_path(moves_list);
-                        // return ret_list;
-                        
-                    
-                },
-                /**
-                 * 
-                 * @param {[][]} moves 
-                 * @returns {[]} list of moves for the best path
-                 */
-                find_best_path : function(moves) {
-                    let best = null;
-                    for (let i = 0; i < moves.length; i++) {
-                        if (moves[i] != null && (best == null || moves[i].length < best.length)) {
-                            best = moves[i];
-                        }
-                    }
-                    if (best == null) {
-                        console.log("ERROR, NO MOVE LIST");
-                        return null;
-                    }
-                    return best;
                 },
                 /**
                  * 
                  * @param {Move_Node} item 
                  * @param {Move_Node[]} list 
-                 * @param {position[][]} b board
+                 * @param {Move_Node} curr
                  */
-                add_helper : function(item, list, b) {
+                add_helper : function(item, list, curr) {
 
-                if (item != null) {
-                    list.push(item)
-                    item.position.to_board(b).set_discovered(true)
+                    // !(curr.position.is_equal(item.position)) &&
+                    if (item != null && item.position.discovered == false) {
+                        list.push(item)
+                        item.position.set_discovered(true)
+                    }
                 }
-            }
                 
                 
         }
