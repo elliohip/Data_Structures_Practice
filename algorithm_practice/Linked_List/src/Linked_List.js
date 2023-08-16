@@ -196,6 +196,15 @@ export default function Linked_List(st) {
                 i++;
             }
             return current;
+        },
+        /**
+         * incomplete method to detect a loop
+         */
+        detect_loop : function(){
+            let fast = this.start;
+            let slow = this.start;
+
+            
         }
     }
 
